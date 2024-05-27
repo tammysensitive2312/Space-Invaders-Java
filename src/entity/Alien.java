@@ -34,10 +34,11 @@ public class Alien extends Sprite{
 
     public void update() {
         y += speed; // Move the alien downward
-        if (y > GamePanel.screenHeight) {
+        if (gp.level >= 4 && y > GamePanel.screenHeight) {
+            speed = 2;
             resetPosition();
         }
-        if (gp.level >= 4 && random.nextInt(100) < 1) {
+        if (gp.level >= 10 && random.nextInt(100) < 1) {
             gp.alienShots.add(new Bomb(gp, x + GamePanel.tileSize / 2, y + GamePanel.tileSize));
         }
     }

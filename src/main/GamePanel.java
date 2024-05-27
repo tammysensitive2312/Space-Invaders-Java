@@ -51,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
         explosions = new ArrayList<>();
         alienShots = new ArrayList<>();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 2; i++) {
             initializeAliens();
         }
     }
@@ -132,23 +132,8 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        // background
-        try {
-            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/image/background.png")));
-            g2.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
         g2.setColor(Color.YELLOW);
-
-        if(key.enterPressed) {
-            String text = "PAUSED";
-            int x = getXforCenteredText(text, g2);
-            int y = GamePanel.tileSize*3;
-            g2.drawString(text, x, y);
-        }
 
         // gameOver
         if (gameOver) {
@@ -156,34 +141,54 @@ public class GamePanel extends JPanel implements Runnable {
             int x = getXforCenteredText(text, g2);
             int y = GamePanel.tileSize*3;
             g2.drawString(text, x, y);
+
+            for (Explosion explosion : explosions) {
+                explosion.draw(g2);
+            }
+        } else {
+            // background
+            try {
+                BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/image/background.png")));
+                g2.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(key.enterPressed) {
+                String text = "PAUSED";
+                int x = getXforCenteredText(text, g2);
+                int y = GamePanel.tileSize*3;
+                g2.drawString(text, x, y);
+            }
+
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24F));
+            g2.setColor(Color.WHITE);
+            g2.drawString("Level: " + level, 20, 40);
+            g2.drawString("Score: " + score, 20, 70);
+
+            // player
+            player.draw(g2);
+
+            // bullet
+            for (Shot bullet : new ArrayList<>(bullets)) {
+                bullet.draw(g2);
+            }
+
+            // aliens
+            for (Alien alien : new ArrayList<>(aliens)) {
+                alien.draw(g2);
+            }
+
+            for (Bomb alienShot : new ArrayList<>(alienShots)) {
+                alienShot.draw(g2);
+            }
+
+            // explosion effect
+            for (Explosion explosion : explosions) {
+                explosion.draw(g2);
+            }
         }
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24F));
-        g2.setColor(Color.WHITE);
-        g2.drawString("Level: " + level, 20, 40);
-        g2.drawString("Score: " + score, 20, 70);
-
-        // player
-        player.draw(g2);
-
-        // bullet
-        for (Shot bullet : new ArrayList<>(bullets)) {
-            bullet.draw(g2);
-        }
-
-        // aliens
-        for (Alien alien : new ArrayList<>(aliens)) {
-            alien.draw(g2);
-        }
-
-        for (Bomb alienShot : new ArrayList<>(alienShots)) {
-            alienShot.draw(g2);
-        }
-
-        // explosion effect
-        for (Explosion explosion : explosions) {
-            explosion.draw(g2);
-        }
 
         g2.dispose();
     }

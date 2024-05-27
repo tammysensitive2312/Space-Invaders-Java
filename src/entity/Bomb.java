@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Bomb extends Sprite{
     int width = GamePanel.tileSize / 2;
     int height = GamePanel.tileSize / 2;
-    int speed = 2;
+    int speed = 3;
     GamePanel gp;
 
     public Bomb(GamePanel gp, int x, int y) {
